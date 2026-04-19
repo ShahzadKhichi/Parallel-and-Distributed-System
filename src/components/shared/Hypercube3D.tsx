@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo, useRef, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Text, Float, PerspectiveCamera, Stars } from '@react-three/drei';
 import * as THREE from 'three';
@@ -15,10 +15,9 @@ const HypercubeInstance: React.FC<Hypercube3DProps> = ({ dimension, activeNodes 
   const vertices = useMemo(() => {
     const numNodes = Math.pow(2, dimension);
     const pos: [number, number, number][] = [];
-    const scale = 2.5; // Slightly larger scale
+    const scale = 3.5;
     
     for (let i = 0; i < numNodes; i++) {
-        // Gray code or simple binary mapping
         const x = (i & 1) ? 1 : -1;
         const y = (i & 2) ? 1 : -1;
         const z = (i & 4) ? 1 : -1;
@@ -75,22 +74,23 @@ const HypercubeNode: React.FC<{ position: [number, number, number], id: number, 
     return (
         <group position={position}>
             <mesh>
-                <sphereGeometry args={[0.25, 32, 32]} />
+                <sphereGeometry args={[0.3, 32, 32]} />
                 <meshStandardMaterial 
-                    color={isActive ? "#fbbf24" : "#1e293b"} // Amber-400 for active, Slate-800 for inactive
-                    emissive={isActive ? "#fbbf24" : "#000"}
-                    emissiveIntensity={isActive ? 3 : 0}
+                    color="#ffffff" 
+                    emissive={isActive ? "#39ff14" : "#ffffff"} 
+                    emissiveIntensity={isActive ? 12 : 0.2}
+                    transparent
+                    opacity={isActive ? 1 : 0.3}
                     metalness={0.8}
                     roughness={0.2}
                 />
             </mesh>
             <Text
-                position={[0, 0.5, 0]}
-                fontSize={0.3}
-                color={isActive ? "#fbbf24" : "#94a3b8"}
+                position={[0, 0.6, 0]}
+                fontSize={0.4}
+                color={isActive ? "#39ff14" : "#ffffff"}
                 anchorX="center"
                 anchorY="middle"
-                font="https://fonts.gstatic.com/s/robotomono/v12/L0tkDFI8S0CD14_9ICHeDxEqWw.woff"
             >
                 {id.toString(2).padStart(3, '0')}
             </Text>
@@ -105,10 +105,10 @@ const HypercubeLine: React.FC<{ start: [number, number, number], end: [number, n
         <primitive object={new THREE.Line(
             new THREE.BufferGeometry().setFromPoints(points),
             new THREE.LineBasicMaterial({
-                color: isActive ? "#fbbf24" : "#334155", // High contrast Amber vs Muted Slate
+                color: isActive ? "#39ff14" : "#ffffff", 
                 transparent: true,
-                opacity: isActive ? 1 : 0.2,
-                linewidth: isActive ? 3 : 1
+                opacity: isActive ? 1 : 0.1,
+                linewidth: 5
             })
         )} />
     );
@@ -116,16 +116,19 @@ const HypercubeLine: React.FC<{ start: [number, number, number], end: [number, n
 
 const Hypercube3D: React.FC<Hypercube3DProps> = (props) => {
   return (
-    <div className="w-full h-full min-h-[500px] bg-gradient-to-b from-gray-950 to-gray-900 rounded-[50px] shadow-inner border border-white/5">
+    <div className="w-full h-full min-h-[500px] bg-black rounded-[50px] shadow-2xl border border-white/5 overflow-hidden">
       <Canvas shadows gl={{ antialias: true }}>
-        <PerspectiveCamera makeDefault position={[0, 0, 10]} />
+        <color attach="background" args={['#000000']} />
+        <PerspectiveCamera makeDefault position={[0, 0, 15]} />
         <OrbitControls enableZoom={false} autoRotate={false} />
-        <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-        <ambientLight intensity={0.7} />
-        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={2} castShadow />
-        <Float speed={1.5} rotationIntensity={0.5} floatIntensity={0.5}>
-            <HypercubeInstance {...props} />
-        </Float>
+        <Stars radius={100} depth={50} count={2000} factor={4} saturation={0} fade speed={1} />
+        <ambientLight intensity={1.5} />
+        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={5} castShadow />
+        <Suspense fallback={null}>
+            <Float speed={1.5} rotationIntensity={0.5} floatIntensity={0.5}>
+                <HypercubeInstance {...props} />
+            </Float>
+        </Suspense>
       </Canvas>
     </div>
   );
