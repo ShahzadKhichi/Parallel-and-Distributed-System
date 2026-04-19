@@ -116,8 +116,8 @@ const HypercubeLine: React.FC<{ start: [number, number, number], end: [number, n
 
 const Hypercube3D: React.FC<Hypercube3DProps> = (props) => {
   return (
-    <div className="w-full h-full min-h-[500px] bg-black rounded-[50px] shadow-2xl border border-white/5 overflow-hidden">
-      <Canvas shadows gl={{ antialias: true }}>
+    <div className="w-full h-full bg-black rounded-[50px] shadow-2xl border border-white/5 overflow-hidden">
+      <Canvas shadows gl={{ antialias: true }} camera={{ position: [0, 0, 12], fov: 45 }}>
         <color attach="background" args={['#000000']} />
         <PerspectiveCamera makeDefault position={[0, 0, 15]} />
         <OrbitControls enableZoom={false} autoRotate={false} />

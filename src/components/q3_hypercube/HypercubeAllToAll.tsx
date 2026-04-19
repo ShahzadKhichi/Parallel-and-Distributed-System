@@ -78,14 +78,14 @@ const HypercubeAllToAll: React.FC = () => {
 
                     <div className="relative group">
                         <div className="absolute -inset-1 bg-gradient-to-r from-amber-500/20 to-cyan-500/20 rounded-[50px] blur-2xl opacity-50 group-hover:opacity-100 transition duration-1000"></div>
-                        <div className="relative">
+                        <div className="relative h-[600px]">
                             <AnimatePresence mode="wait">
                                 <motion.div
                                     key={activeStep}
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -20 }}
-                                    className="w-full h-full min-h-[500px]"
+                                    className="w-full h-full"
                                 >
                                    <Hypercube3D 
                                       dimension={dimension} 
