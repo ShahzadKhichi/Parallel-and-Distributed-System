@@ -10,7 +10,7 @@ A high-performance, interactive web application designed to visualize complex **
 ---
 
 ## 🔗 Live Demo
-**[Launch Visualizer Placeholder](https://your-live-url-here.netlify.app)**
+**[Launch Visualizer](https://pdc-visualizer.netlify.app/)**
 
 ---
 
